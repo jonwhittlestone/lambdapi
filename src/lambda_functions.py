@@ -35,7 +35,8 @@ def get_or_create_access_policy_for_lambda(policy_name):
                         "s3:*",
                         "logs:CreateLogGroup",
                         "logs:CreateLogStream",
-                        "logs:PutLogEvents"
+                        "logs:PutLogEvents",
+                        "cloudwatch:PutMetricData"
                     ],
                     "Effect": "Allow",
                     "Resource": "*"
@@ -47,7 +48,7 @@ def get_or_create_access_policy_for_lambda(policy_name):
             PolicyName=policy_name,
             PolicyDocument=json.dumps(s3_access_policy_document),
             Description='Allows lambda function to access s3 resources'
-        )
+        )['Policy']
     
     return policy
 
@@ -59,9 +60,13 @@ def find_policy(policy_name):
         
         
 def find_role(lambda_role):
-    role = iam_client().get_role(RoleName=lambda_role)
-    if role.get('Role',False):
-        return role.get('Role')
+    try:
+        role = iam_client().get_role(RoleName=lambda_role)
+        if role.get('Role',False):
+            return role.get('Role')
+    except iam_client().exceptions.NoSuchEntityException:
+        pass
+
     
     
 def get_or_create_execution_role_lambda(arn, lambda_role):
@@ -85,7 +90,7 @@ def get_or_create_execution_role_lambda(arn, lambda_role):
         RoleName=lambda_role,
         AssumeRolePolicyDocument=json.dumps(lambda_execution_assumption_role),
         Description='Gives necessary permissions for lambda to be executed'
-    )
+    )['Role']
 
 def attach_access_policy_to_execution_role(lambda_role, policy_arn):
      return iam_client().attach_role_policy(RoleName=lambda_role,PolicyArn=policy_arn)
@@ -109,7 +114,10 @@ def deploy_lambda_function(function_name, runtime, handler, role_arn, source_fol
     )
 
 def remove_function(lambda_name):
-    return lambda_client().delete_function(FunctionName=lambda_name)
+    try:
+        return lambda_client().delete_function(FunctionName=lambda_name)
+    except lambda_client().exceptions.ResourceNotFoundException:
+        pass
 
 def invoke_function(lambda_name):
     return lambda_client().invoke(FunctionName=lambda_name)
