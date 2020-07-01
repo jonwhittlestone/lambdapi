@@ -5,12 +5,45 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ARTICLE REPO MODULE: lambda-api-boto3",
+      "name": "MAIN",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.py",
+      "console": "integratedTerminal",
+      "args": [],
+      "django": false
+    },
+    {
+      "name": "lambda_functions.py",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/src/lambda_functions.py",
       "console": "integratedTerminal",
       "args": [
+      ],
+      "django": false
+    },
+
+    {
+      "name": "api_gateway.py create",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/api_gateway.py",
+      "console": "integratedTerminal",
+      "args": [
+        "create"
+      ],
+      "django": false
+    },
+
+    {
+      "name": "api_gateway.py reset",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/api_gateway.py",
+      "console": "integratedTerminal",
+      "args": [
+        "reset"
       ],
       "django": false
     }
