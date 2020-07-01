@@ -1,5 +1,7 @@
+import os
+
 AWS_REGION = 'eu-west-2'
-AWS_ACCOUNT_NUMBER = '608249423985'
+AWS_ACCOUNT_NUMBER = os.environ.get('AWS_ACCOUNT_NUMBER')
 
 PYTHON_LAMBDA_NAME = 'PythonLambdaFunction'
 LAMBDA_POLICY_NAME = 'LambdaS3AccessPolicy'

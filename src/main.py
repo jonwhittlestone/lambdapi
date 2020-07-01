@@ -1,10 +1,13 @@
 from clize import run
 from api_gateway import remove_api, create_api, deploy_api, test_api
 from lambda_functions import remove_function, create_lambda, deploy_lambda
-from settings import PYTHON_LAMBDA_NAME
+from settings import PYTHON_LAMBDA_NAME, AWS_ACCOUNT_NUMBER
 
 def start(op = None):
     
+    if not AWS_ACCOUNT_NUMBER:
+        return 'You need to export the `AWS_ACCOUNT_NUMBER`. Exiting.'
+
     if op == 'reset':
         remove_api()
         remove_function(PYTHON_LAMBDA_NAME)
