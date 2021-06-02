@@ -14,4 +14,4 @@ s3transfer==0.3.3
 sigtools==2.0.2
 six==1.15.0
 tabulate==0.8.7
-urllib3==1.25.9
+urllib3==1.26.5
